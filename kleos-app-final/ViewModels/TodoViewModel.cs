@@ -45,13 +45,7 @@ public partial class TodoViewModel : BaseViewModel
 
         try
         {
-            var todos = await _database.GetIncompleteTodosForUserAsync(_authService.CurrentUserId);
-            Todos.Clear();
-            foreach (var todo in todos)
-            {
-                Todos.Add(todo);
-            }
-            HasNoTodos = Todos.Count == 0;
+            await RefreshTodosAsync();
         }
         catch (Exception ex)
         {
@@ -80,7 +74,10 @@ public partial class TodoViewModel : BaseViewModel
     [RelayCommand]
     public async Task AddTodoAsync()
     {
-        if (string.IsNullOrWhiteSpace(NewTodoTitle))
+        var title = NewTodoTitle.Trim();
+        var description = NewTodoDescription.Trim();
+
+        if (string.IsNullOrWhiteSpace(title))
         {
             ErrorMessage = "Please enter a task title.";
             return;
@@ -93,14 +90,15 @@ public partial class TodoViewModel : BaseViewModel
         }
 
         IsLoading = true;
+        ClearError();
 
         try
         {
             var todo = new Todo
             {
                 UserId = _authService.CurrentUserId,
-                Title = NewTodoTitle,
-                Description = NewTodoDescription,
+                Title = title,
+                Description = string.IsNullOrWhiteSpace(description) ? null : description,
                 IsCompleted = false,
                 CreatedAt = DateTime.UtcNow
             };
@@ -110,7 +108,7 @@ public partial class TodoViewModel : BaseViewModel
             NewTodoDescription = string.Empty;
             ShowAddTodoSheet = false;
 
-            await LoadTodosAsync();
+            await RefreshTodosAsync();
         }
         catch (Exception ex)
         {
@@ -150,6 +148,17 @@ public partial class TodoViewModel : BaseViewModel
         {
             await Shell.Current.GoToAsync($"///edittask?taskId={todo.Id}");
         }
+    }
+
+    private async Task RefreshTodosAsync()
+    {
+        var todos = await _database.GetIncompleteTodosForUserAsync(_authService.CurrentUserId);
+        Todos.Clear();
+        foreach (var todo in todos)
+        {
+            Todos.Add(todo);
+        }
+        HasNoTodos = Todos.Count == 0;
     }
 
     public async Task OnAppearingAsync()

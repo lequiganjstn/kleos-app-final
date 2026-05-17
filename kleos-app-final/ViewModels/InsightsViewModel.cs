@@ -1,13 +1,16 @@
+using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using kleos_app_final.Services;
-using kleos_app_final.Utilities;
 
 namespace kleos_app_final.ViewModels;
 
 #pragma warning disable MVVMTK0045
 public partial class InsightsViewModel : BaseViewModel
 {
+    private const double MinimumBarHeight = 8;
+    private const double MaximumBarHeight = 64;
+
     private readonly DatabaseService _database;
     private readonly AuthenticationService _authService;
     private readonly StreakService _streakService;
@@ -23,6 +26,9 @@ public partial class InsightsViewModel : BaseViewModel
 
     [ObservableProperty]
     private Dictionary<DateTime, int> lastSevenDaysTasks = new();
+
+    [ObservableProperty]
+    private ObservableCollection<DailyTaskInsight> lastSevenDaysInsights = new();
 
     public InsightsViewModel(DatabaseService database, AuthenticationService authService, StreakService streakService)
     {
@@ -42,36 +48,19 @@ public partial class InsightsViewModel : BaseViewModel
 
         try
         {
-            // Get last 7 days data
-            var lastSevenDays = await _streakService.GetCompletedTasksLastNDaysAsync(_authService.CurrentUserId, 7);
-            LastSevenDaysTasks = lastSevenDays;
-
-            // Calculate this week vs last week
             var today = DateTime.UtcNow.Date;
             var weekStart = today.AddDays(-(int)today.DayOfWeek);
+            var lastWeekStart = weekStart.AddDays(-7);
 
-            TasksCompletedThisWeek = 0;
-            for (int i = 0; i < 7; i++)
-            {
-                var date = weekStart.AddDays(i);
-                if (lastSevenDays.ContainsKey(date))
-                {
-                    TasksCompletedThisWeek += lastSevenDays[date];
-                }
-            }
+            LastSevenDaysTasks = await GetCompletedTasksByDayAsync(today.AddDays(-6), today);
+            LastSevenDaysInsights = BuildLastSevenDaysInsights(LastSevenDaysTasks, today);
 
-            // Get last week data (requires database query)
-            var lastWeekData = await _streakService.GetCompletedTasksLastNDaysAsync(_authService.CurrentUserId, 14);
-            TasksCompletedLastWeek = 0;
-            for (int i = 7; i < 14; i++)
-            {
-                var date = DateTime.UtcNow.Date.AddDays(-i);
-                if (lastWeekData.ContainsKey(date))
-                {
-                    TasksCompletedLastWeek += lastWeekData[date];
-                }
-            }
+            TasksCompletedThisWeek = SumCompletedTasks(LastSevenDaysTasks, weekStart, today);
 
+            var previousWeekTasks = await GetCompletedTasksByDayAsync(lastWeekStart, weekStart.AddDays(-1));
+            TasksCompletedLastWeek = SumCompletedTasks(previousWeekTasks, lastWeekStart, weekStart.AddDays(-1));
+
+            await _streakService.UpdateStreakForTodayAsync(_authService.CurrentUserId);
             UpdateWeekComparisonText();
         }
         catch (Exception ex)
@@ -82,6 +71,54 @@ public partial class InsightsViewModel : BaseViewModel
         {
             IsLoading = false;
         }
+    }
+
+    private async Task<Dictionary<DateTime, int>> GetCompletedTasksByDayAsync(DateTime startDate, DateTime endDate)
+    {
+        var result = new Dictionary<DateTime, int>();
+
+        for (var date = startDate.Date; date <= endDate.Date; date = date.AddDays(1))
+        {
+            result[date] = await _database.GetCompletedTodosCountForDateAsync(_authService.CurrentUserId, date);
+        }
+
+        return result;
+    }
+
+    private static int SumCompletedTasks(Dictionary<DateTime, int> tasksByDay, DateTime startDate, DateTime endDate)
+    {
+        var total = 0;
+
+        for (var date = startDate.Date; date <= endDate.Date; date = date.AddDays(1))
+        {
+            total += tasksByDay.GetValueOrDefault(date, 0);
+        }
+
+        return total;
+    }
+
+    private static ObservableCollection<DailyTaskInsight> BuildLastSevenDaysInsights(Dictionary<DateTime, int> tasksByDay, DateTime today)
+    {
+        var maxTasks = Math.Max(1, tasksByDay.Values.DefaultIfEmpty(0).Max());
+        var insights = new ObservableCollection<DailyTaskInsight>();
+
+        for (var date = today.AddDays(-6); date <= today; date = date.AddDays(1))
+        {
+            var tasksCompleted = tasksByDay.GetValueOrDefault(date, 0);
+            var barHeight = tasksCompleted == 0
+                ? MinimumBarHeight
+                : MinimumBarHeight + ((MaximumBarHeight - MinimumBarHeight) * tasksCompleted / maxTasks);
+
+            insights.Add(new DailyTaskInsight
+            {
+                DayLabel = date == today ? "Today" : date.ToString("ddd"),
+                TasksCompleted = tasksCompleted,
+                BarHeight = barHeight,
+                BarColor = tasksCompleted > 0 ? "#000000" : "#e2e2e2"
+            });
+        }
+
+        return insights;
     }
 
     private void UpdateWeekComparisonText()
@@ -116,5 +153,16 @@ public partial class InsightsViewModel : BaseViewModel
     {
         await LoadInsightsAsync();
     }
+}
+
+public class DailyTaskInsight
+{
+    public string DayLabel { get; init; } = string.Empty;
+
+    public int TasksCompleted { get; init; }
+
+    public double BarHeight { get; init; }
+
+    public string BarColor { get; init; } = "#e2e2e2";
 }
 #pragma warning restore MVVMTK0045
