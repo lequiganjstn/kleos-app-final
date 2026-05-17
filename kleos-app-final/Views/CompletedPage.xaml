@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="kleos_app_final.Views.CompletedPage"
+             Title="Completed"
+             BackgroundColor="#f9f9f9">
+
+    <VerticalStackLayout Padding="20" Spacing="12">
+        
+        <!-- Header -->
+        <Label Text="Completed Tasks"
+               FontFamily="InstrumentSerif"
+               FontSize="32"
+               TextColor="#000000"
+               Margin="0,16,0,0" />
+
+        <!-- Error Message -->
+        <Label Text="{Binding ErrorMessage}"
+               FontFamily="Inter"
+               FontSize="14"
+               TextColor="#ba1a1a"
+               IsVisible="{Binding ErrorMessage, Converter={StaticResource StringToBoolConverter}}"
+               Margin="0,12,0,0" />
+
+        <!-- Empty State -->
+        <StackLayout IsVisible="{Binding HasNoCompletedTodos}" 
+                    HorizontalOptions="Center" 
+                    VerticalOptions="Center"
+                    Spacing="16"
+                    Margin="0,40,0,0">
+            <Image Source="icon_flag.svg"
+                   WidthRequest="64"
+                   HeightRequest="64"
+                   HorizontalOptions="Center" />
+            <Label Text="No completed tasks yet"
+                   FontFamily="InstrumentSerif"
+                   FontSize="24"
+                   TextColor="#4c4546"
+                   HorizontalTextAlignment="Center" />
+            <Label Text="Complete tasks from the Todo tab to see them here."
+                   FontFamily="Inter"
+                   FontSize="14"
+                   TextColor="#7e7576"
+                   HorizontalTextAlignment="Center" />
+        </StackLayout>
+
+        <!-- Completed List -->
+        <CollectionView ItemsSource="{Binding CompletedTodos}"
+                       IsVisible="{Binding HasNoCompletedTodos, Converter={StaticResource InvertedBoolConverter}}"
+                       SelectionMode="Single"
+                       Margin="0,12,0,0">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <StackLayout Padding="0,12,0,0" Spacing="0">
+                        <SwipeView>
+                            <SwipeView.RightItems>
+                                <SwipeItems SwipeBehaviorOnInvoked="Close">
+                                    <SwipeItem Text="Delete"
+                                              BackgroundColor="#ba1a1a"
+                                              Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.SwipedDeleteCommand}"
+                                              CommandParameter="{Binding .}" />
+                                </SwipeItems>
+                            </SwipeView.RightItems>
+                            
+                            <Border StrokeThickness="1" StrokeShape="Rectangle" Stroke="#e2e2e2" Padding="0">
+                                <StackLayout Padding="12" 
+                                           BackgroundColor="#f3f3f3"
+                                           Spacing="4">
+                                    <Label Text="{Binding Title}"
+                                           FontFamily="Inter"
+                                           FontSize="16"
+                                           FontAttributes="Bold"
+                                           TextColor="#7e7576"
+                                           TextDecorations="Strikethrough" />
+                                    <Label Text="{Binding CompletedAt, StringFormat='{0:MMM dd, yyyy}'}"
+                                           FontFamily="Inter"
+                                           FontSize="12"
+                                           TextColor="#7e7576" />
+                                </StackLayout>
+                            </Border>
+                        </SwipeView>
+
+                        <BoxView Color="#e2e2e2" HeightRequest="1" Margin="0,0,0,0" />
+                    </StackLayout>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+    </VerticalStackLayout>
+
+</ContentPage>

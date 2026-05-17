@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="kleos_app_final.Views.TodoPage"
+             Title="Todo"
+             BackgroundColor="#f9f9f9">
+
+    <Grid RowDefinitions="*,60" ColumnDefinitions="*">
+        
+        <!-- Main Content -->
+        <VerticalStackLayout Grid.Row="0" Padding="20,0">
+            
+            <!-- Header -->
+            <Label Text="Today's Tasks"
+                   FontFamily="InstrumentSerif"
+                   FontSize="32"
+                   TextColor="#000000"
+                   Margin="0,16,0,0" />
+
+            <!-- Error Message -->
+            <Label Text="{Binding ErrorMessage}"
+                   FontFamily="Inter"
+                   FontSize="14"
+                   TextColor="#ba1a1a"
+                   IsVisible="{Binding ErrorMessage, Converter={StaticResource StringToBoolConverter}}"
+                   Margin="0,12,0,0" />
+
+            <!-- Empty State -->
+            <StackLayout IsVisible="{Binding HasNoTodos}" 
+                        HorizontalOptions="Center" 
+                        VerticalOptions="Center"
+                        Spacing="16"
+                        Margin="0,40,0,0">
+                <Label Text="✓"
+                       FontSize="64"
+                       TextColor="#e2e2e2"
+                       HorizontalOptions="Center" />
+                <Label Text="All tasks completed!"
+                       FontFamily="InstrumentSerif"
+                       FontSize="24"
+                       TextColor="#4c4546"
+                       HorizontalTextAlignment="Center" />
+                <Label Text="Add a new task to get started."
+                       FontFamily="Inter"
+                       FontSize="14"
+                       TextColor="#7e7576"
+                       HorizontalTextAlignment="Center" />
+            </StackLayout>
+
+            <!-- Todos List -->
+            <CollectionView ItemsSource="{Binding Todos}"
+                           IsVisible="{Binding HasNoTodos, Converter={StaticResource InvertedBoolConverter}}"
+                           SelectionMode="Single"
+                           Margin="0,12,0,0">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <StackLayout Padding="0,12,0,0" Spacing="0">
+                            <SwipeView>
+                                <SwipeView.RightItems>
+                                    <SwipeItems SwipeBehaviorOnInvoked="Close">
+                                        <SwipeItem Text="Complete"
+                                                  BackgroundColor="#000000"
+                                                  Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.SwipedCompletedCommand}"
+                                                  CommandParameter="{Binding .}" />
+                                    </SwipeItems>
+                                </SwipeView.RightItems>
+                                
+                                <Border StrokeThickness="1" StrokeShape="Rectangle" Stroke="#e2e2e2">
+                                    <Border.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.EditTaskCommand}"
+                                                            CommandParameter="{Binding .}" />
+                                    </Border.GestureRecognizers>
+                                    <StackLayout Padding="12" 
+                                               BackgroundColor="#ffffff"
+                                               Spacing="4">
+                                        <Label Text="{Binding Title}"
+                                               FontFamily="Inter"
+                                               FontSize="16"
+                                               FontAttributes="Bold"
+                                               TextColor="#000000" />
+                                        <Label Text="{Binding Description}"
+                                               FontFamily="Inter"
+                                               FontSize="12"
+                                               TextColor="#7e7576"
+                                               LineBreakMode="TailTruncation"
+                                               IsVisible="{Binding Description, Converter={StaticResource StringToBoolConverter}}" />
+                                    </StackLayout>
+                                </Border>
+                            </SwipeView>
+
+                            <BoxView Color="#e2e2e2" HeightRequest="1" Margin="0,0,0,0" />
+                        </StackLayout>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+        </VerticalStackLayout>
+
+        <!-- Floating Action Button -->
+        <Button Text="+"
+                Grid.Row="1"
+                HorizontalOptions="End"
+                VerticalOptions="End"
+                WidthRequest="56"
+                HeightRequest="56"
+                CornerRadius="0"
+                FontSize="32"
+                FontAttributes="Bold"
+                TextColor="#ffffff"
+                BackgroundColor="#000000"
+                Padding="0"
+                Margin="20"
+                Command="{Binding OpenAddTodoModalCommand}" />
+
+            <!-- Add Todo Bottom Sheet -->
+            <VerticalStackLayout Grid.Row="0" Grid.RowSpan="2"
+                               IsVisible="{Binding ShowAddTodoSheet}"
+                               Padding="20"
+                               BackgroundColor="#00000066"
+                               Opacity="1">
+                
+                <Border StrokeThickness="2" StrokeShape="Rectangle" Stroke="#000000" Padding="0" VerticalOptions="End">
+                    <StackLayout Padding="20" 
+                                BackgroundColor="#ffffff"
+                                Spacing="12">
+                        
+                        <Label Text="New Task"
+                               FontFamily="InstrumentSerif"
+                               FontSize="24"
+                               TextColor="#000000" />
+
+                        <Entry x:Name="TitleEntry"
+                               Placeholder="Task title *"
+                               Text="{Binding NewTodoTitle}"
+                               PlaceholderColor="#7e7576"
+                               FontFamily="Inter"
+                               FontSize="16"
+                               TextColor="#1a1c1c"
+                               Margin="0,8,0,8" />
+
+                        <Entry x:Name="DescriptionEntry"
+                               Placeholder="Description (optional)"
+                               Text="{Binding NewTodoDescription}"
+                               PlaceholderColor="#7e7576"
+                               FontFamily="Inter"
+                               FontSize="16"
+                               TextColor="#1a1c1c"
+                               Margin="0,8,0,8" />
+
+                        <StackLayout Orientation="Horizontal" Spacing="12" Margin="0,12,0,0">
+                            <Button Text="Add"
+                                   Command="{Binding AddTodoCommand}"
+                                   FontFamily="Inter"
+                                   FontSize="14"
+                                   FontAttributes="Bold"
+                                   TextColor="#ffffff"
+                                   BackgroundColor="#000000"
+                                   CornerRadius="0"
+                                   HorizontalOptions="FillAndExpand" />
+
+                            <Button Text="Cancel"
+                                   Command="{Binding CloseAddTodoModalCommand}"
+                                   FontFamily="Inter"
+                                   FontSize="14"
+                                   FontAttributes="Bold"
+                                   TextColor="#000000"
+                                   BackgroundColor="#ffffff"
+                                   BorderColor="#000000"
+                                   BorderWidth="2"
+                                   CornerRadius="0"
+                                   HorizontalOptions="FillAndExpand" />
+                        </StackLayout>
+
+                    </StackLayout>
+                </Border>
+            </VerticalStackLayout>
+
+    </Grid>
+
+</ContentPage>

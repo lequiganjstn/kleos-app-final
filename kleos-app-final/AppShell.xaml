@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="kleos_app_final.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:kleos_app_final.Views"
+    Title="Kleos"
+    BackgroundColor="#f9f9f9"
+    ForegroundColor="#000000">
+
+    <Shell.Resources>
+        <ResourceDictionary>
+            <!-- Tab bar styling -->
+            <Color x:Key="TabBarBackgroundColor">#ffffff</Color>
+            <Color x:Key="TabBarForegroundColor">#000000</Color>
+        </ResourceDictionary>
+    </Shell.Resources>
+
+    <!-- Login/Register (not in tabs) -->
+    <ShellContent Route="login" 
+                  ContentTemplate="{DataTemplate local:LoginPage}" />
+    
+    <ShellContent Route="register" 
+                  ContentTemplate="{DataTemplate local:RegisterPage}" />
+
+    <!-- Main App with Tabs -->
+    <TabBar x:Name="mainTabBar" Route="todo">
+        
+        <ShellContent Title="Todo" 
+                     Route="todo"
+                     ContentTemplate="{DataTemplate local:TodoPage}" />
+        
+        <ShellContent Title="Completed" 
+                     Route="completed"
+                     ContentTemplate="{DataTemplate local:CompletedPage}" />
+        
+        <ShellContent Title="Streaks" 
+                     Route="streaks"
+                     ContentTemplate="{DataTemplate local:StreaksPage}" />
+        
+        <ShellContent Title="Insights" 
+                     Route="insights"
+                     ContentTemplate="{DataTemplate local:InsightsPage}" />
+        
+        <ShellContent Title="Profile" 
+                     Route="profile"
+                     ContentTemplate="{DataTemplate local:ProfilePage}" />
+
+    </TabBar>
+
+    <!-- Edit Task Page (modal/detail) -->
+    <ShellContent Route="edittask"
+                  ContentTemplate="{DataTemplate local:EditTaskPage}" />
+
+</Shell>

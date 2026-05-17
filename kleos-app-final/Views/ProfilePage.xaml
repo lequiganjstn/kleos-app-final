@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="kleos_app_final.Views.ProfilePage"
+             Title="Profile"
+             BackgroundColor="#f9f9f9">
+
+    <VerticalStackLayout Padding="20" Spacing="12">
+        
+        <!-- Header -->
+        <Label Text="Profile"
+               FontFamily="InstrumentSerif"
+               FontSize="32"
+               TextColor="#000000"
+               Margin="0,16,0,0" />
+
+        <!-- Loading -->
+        <ActivityIndicator IsRunning="{Binding IsLoading}"
+                          IsVisible="{Binding IsLoading}"
+                          Color="#000000" />
+
+        <!-- Error Message -->
+        <Label Text="{Binding ErrorMessage}"
+               FontFamily="Inter"
+               FontSize="14"
+               TextColor="#ba1a1a"
+               IsVisible="{Binding ErrorMessage, Converter={StaticResource StringToBoolConverter}}"
+               Margin="0,12,0,0" />
+
+        <!-- Avatar Section -->
+        <Border StrokeThickness="1" StrokeShape="Rectangle" Stroke="#e2e2e2" Padding="0" Margin="0,24,0,0" HorizontalOptions="Center">
+            <StackLayout Padding="20" 
+                        BackgroundColor="#ffffff"
+                        Spacing="12"
+                        HorizontalOptions="Center"
+                        VerticalOptions="Center">
+                
+                <!-- Avatar Image or Initials -->
+                <StackLayout HorizontalOptions="Center" VerticalOptions="Center">
+                    <Image Source="{Binding AvatarPath}"
+                           IsVisible="{Binding HasAvatar}"
+                           WidthRequest="120"
+                           HeightRequest="120"
+                           Aspect="AspectFill" />
+                    
+                    <StackLayout IsVisible="{Binding HasAvatar, Converter={StaticResource InvertedBoolConverter}}"
+                                Padding="20"
+                                BackgroundColor="#e2e2e2"
+                                WidthRequest="120"
+                                HeightRequest="120"
+                                HorizontalOptions="Center"
+                                VerticalOptions="Center">
+                        <Label Text="{Binding InitialsText}"
+                               FontFamily="InstrumentSerif"
+                               FontSize="48"
+                               TextColor="#000000"
+                               HorizontalTextAlignment="Center"
+                               VerticalTextAlignment="Center"
+                               HorizontalOptions="FillAndExpand"
+                               VerticalOptions="FillAndExpand" />
+                    </StackLayout>
+                </StackLayout>
+
+                <!-- Change Avatar Button -->
+                <Button Text="Change Avatar"
+                       Command="{Binding PickAvatarCommand}"
+                       FontFamily="Inter"
+                       FontSize="14"
+                       FontAttributes="Bold"
+                       TextColor="#000000"
+                       BackgroundColor="#ffffff"
+                       BorderColor="#000000"
+                       BorderWidth="2"
+                       CornerRadius="0"
+                       Padding="16,8" />
+
+            </StackLayout>
+        </Border>
+
+        <!-- User Info -->
+        <Border StrokeThickness="1" StrokeShape="Rectangle" Stroke="#e2e2e2" Padding="0" Margin="0,16,0,0">
+            <StackLayout Padding="20" 
+                        BackgroundColor="#ffffff"
+                        Spacing="12">
+                
+                <StackLayout Spacing="4">
+                    <Label Text="Name"
+                           FontFamily="Inter"
+                           FontSize="12"
+                           FontAttributes="Bold"
+                           TextColor="#7e7576" />
+                    <Label Text="{Binding UserName}"
+                           FontFamily="Inter"
+                           FontSize="16"
+                           TextColor="#000000" />
+                </StackLayout>
+
+                <BoxView Color="#e2e2e2" HeightRequest="1" Margin="0,8,0,8" />
+
+                <StackLayout Spacing="4">
+                    <Label Text="Email"
+                           FontFamily="Inter"
+                           FontSize="12"
+                           FontAttributes="Bold"
+                           TextColor="#7e7576" />
+                    <Label Text="{Binding UserEmail}"
+                           FontFamily="Inter"
+                           FontSize="16"
+                           TextColor="#000000"
+                           LineBreakMode="TailTruncation" />
+                </StackLayout>
+
+            </StackLayout>
+        </Border>
+
+        <!-- Spacer -->
+        <BoxView Color="Transparent" HeightRequest="20" />
+
+        <!-- Logout Button -->
+        <Button Text="Logout"
+               Command="{Binding LogoutCommand}"
+               FontFamily="Inter"
+               FontSize="16"
+               FontAttributes="Bold"
+               TextColor="#ffffff"
+               BackgroundColor="#ba1a1a"
+               CornerRadius="0"
+               Padding="0,16" />
+
+    </VerticalStackLayout>
+
+</ContentPage>

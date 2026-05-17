@@ -1,0 +1,10 @@
+<api type="debug" assembly-name="kleos-app-final" mvid="3488337d34594732b1b2f472e6895b43">
+  <java-to-managed>
+    <entry java-name="crc6438d42318cd366499/MainActivity" managed-name="kleos_app_final.MainActivity, kleos-app-final" managed-type-token-id="33554453" />
+    <entry java-name="crc6438d42318cd366499/MainApplication" managed-name="kleos_app_final.MainApplication, kleos-app-final" managed-type-token-id="33554454" />
+  </java-to-managed>
+  <managed-to-java>
+    <entry java-name="crc6438d42318cd366499/MainActivity" managed-name="kleos_app_final.MainActivity, kleos-app-final" managed-type-token-id="33554453" />
+    <entry java-name="crc6438d42318cd366499/MainApplication" managed-name="kleos_app_final.MainApplication, kleos-app-final" managed-type-token-id="33554454" />
+  </managed-to-java>
+</api>

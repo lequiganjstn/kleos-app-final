@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="kleos_app_final.Views.EditTaskPage"
+             Title="Edit Task"
+             BackgroundColor="#f9f9f9">
+
+    <VerticalStackLayout Padding="20" Spacing="16">
+        
+        <!-- Loading Indicator -->
+        <ActivityIndicator IsRunning="{Binding IsLoading}"
+                          IsVisible="{Binding IsLoading}"
+                          Color="#000000" />
+
+        <!-- Error Message -->
+        <Label Text="{Binding ErrorMessage}"
+               FontFamily="Inter"
+               FontSize="14"
+               TextColor="#ba1a1a"
+               IsVisible="{Binding ErrorMessage, Converter={StaticResource StringToBoolConverter}}"
+               Margin="0,12,0,0"
+               LineBreakMode="WordWrap" />
+
+        <!-- Header -->
+        <Label Text="Edit Task"
+               FontFamily="InstrumentSerif"
+               FontSize="32"
+               TextColor="#000000"
+               Margin="0,16,0,0" />
+
+        <!-- Task Title -->
+        <StackLayout Spacing="8" Margin="0,8,0,0">
+            <Label Text="Title"
+                   FontFamily="Inter"
+                   FontSize="12"
+                   FontAttributes="Bold"
+                   TextColor="#7e7576" />
+            <Entry Placeholder="Enter task title"
+                   Text="{Binding TaskTitle}"
+                   FontFamily="Inter"
+                   FontSize="14"
+                   TextColor="#000000"
+                   PlaceholderColor="#cccccc"
+                   BackgroundColor="#ffffff" />
+        </StackLayout>
+
+        <!-- Task Description -->
+        <StackLayout Spacing="8" Margin="0,12,0,0">
+            <Label Text="Description"
+                   FontFamily="Inter"
+                   FontSize="12"
+                   FontAttributes="Bold"
+                   TextColor="#7e7576" />
+            <Editor Placeholder="Enter task description (optional)"
+                    Text="{Binding TaskDescription}"
+                    FontFamily="Inter"
+                    FontSize="14"
+                    TextColor="#000000"
+                    PlaceholderColor="#cccccc"
+                    BackgroundColor="#ffffff"
+                    HeightRequest="120"
+                    AutoSize="TextChanges" />
+        </StackLayout>
+
+        <!-- Spacer -->
+        <BoxView Color="Transparent" />
+
+        <!-- Action Buttons -->
+        <VerticalStackLayout Spacing="12" Margin="0,24,0,0">
+            
+            <!-- Update Button -->
+            <Button Text="Update"
+                    Command="{Binding UpdateTaskCommand}"
+                    FontFamily="Inter"
+                    FontSize="14"
+                    FontAttributes="Bold"
+                    TextColor="#ffffff"
+                    BackgroundColor="#000000"
+                    Padding="16,12"
+                    CornerRadius="8"
+                    IsEnabled="{Binding IsLoading, Converter={StaticResource InvertedBoolConverter}}" />
+            
+            <!-- Complete Button -->
+            <Button Text="Complete"
+                    Command="{Binding CompleteTaskCommand}"
+                    FontFamily="Inter"
+                    FontSize="14"
+                    FontAttributes="Bold"
+                    TextColor="#000000"
+                    BackgroundColor="#e2e2e2"
+                    Padding="16,12"
+                    CornerRadius="8"
+                    IsEnabled="{Binding IsLoading, Converter={StaticResource InvertedBoolConverter}}" />
+            
+            <!-- Cancel Button -->
+            <Button Text="Cancel"
+                    Command="{Binding CancelCommand}"
+                    FontFamily="Inter"
+                    FontSize="14"
+                    TextColor="#7e7576"
+                    BackgroundColor="Transparent"
+                    Padding="16,12"
+                    IsEnabled="{Binding IsLoading, Converter={StaticResource InvertedBoolConverter}}" />
+        </VerticalStackLayout>
+
+    </VerticalStackLayout>
+
+</ContentPage>

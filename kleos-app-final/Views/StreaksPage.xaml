@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="kleos_app_final.Views.StreaksPage"
+             Title="Streaks"
+             BackgroundColor="#f9f9f9">
+
+    <VerticalStackLayout Padding="20" Spacing="12">
+        
+        <!-- Header -->
+        <Label Text="Your Streak"
+               FontFamily="InstrumentSerif"
+               FontSize="32"
+               TextColor="#000000"
+               Margin="0,16,0,0" />
+
+        <!-- Loading -->
+        <ActivityIndicator IsRunning="{Binding IsLoading}"
+                          IsVisible="{Binding IsLoading}"
+                          Color="#000000" />
+
+        <!-- Error Message -->
+        <Label Text="{Binding ErrorMessage}"
+               FontFamily="Inter"
+               FontSize="14"
+               TextColor="#ba1a1a"
+               IsVisible="{Binding ErrorMessage, Converter={StaticResource StringToBoolConverter}}"
+               Margin="0,12,0,0" />
+
+        <!-- Streak Status Message -->
+        <Label Text="{Binding StreakStatusMessage}"
+               FontFamily="Inter"
+               FontSize="14"
+               TextColor="#4c4546"
+               HorizontalTextAlignment="Center"
+               Margin="0,12,0,0" />
+
+        <!-- Current Streak Card -->
+        <Border StrokeThickness="2" StrokeShape="Rectangle" Stroke="#000000" Padding="0" Margin="0,24,0,0">
+            <StackLayout Padding="24" 
+                        BackgroundColor="#ffffff"
+                        Spacing="8">
+                <Label Text="Current Streak"
+                       FontFamily="Inter"
+                       FontSize="12"
+                       FontAttributes="Bold"
+                       TextColor="#7e7576" />
+                <Label Text="{Binding CurrentStreak, StringFormat='{0} days'}"
+                       FontFamily="InstrumentSerif"
+                       FontSize="48"
+                       TextColor="#000000"
+                       HorizontalTextAlignment="Center" />
+                <Image Source="icon_flame.svg"
+                       WidthRequest="32"
+                       HeightRequest="32"
+                       HorizontalOptions="Center" />
+            </StackLayout>
+        </Border>
+
+        <!-- Longest Streak Card -->
+        <Border StrokeThickness="1" StrokeShape="Rectangle" Stroke="#e2e2e2" Padding="0" Margin="0,16,0,0">
+            <StackLayout Padding="24" 
+                        BackgroundColor="#f3f3f3"
+                        Spacing="8">
+                <Label Text="Longest Streak"
+                       FontFamily="Inter"
+                       FontSize="12"
+                       FontAttributes="Bold"
+                       TextColor="#7e7576" />
+                <Label Text="{Binding LongestStreak, StringFormat='{0} days'}"
+                       FontFamily="InstrumentSerif"
+                       FontSize="40"
+                       TextColor="#4c4546"
+                       HorizontalTextAlignment="Center" />
+                <Image Source="icon_star.svg"
+                       WidthRequest="28"
+                       HeightRequest="28"
+                       HorizontalOptions="Center" />
+            </StackLayout>
+        </Border>
+
+        <!-- Tips -->
+        <Border StrokeThickness="0" StrokeShape="Rectangle" Stroke="#e2e2e2" Padding="0" Margin="0,24,0,0">
+            <StackLayout Padding="16" 
+                        BackgroundColor="#e2e2e2"
+                        Spacing="8">
+                <StackLayout Orientation="Horizontal" Spacing="8">
+                    <Image Source="icon_lightning.svg"
+                           WidthRequest="16"
+                           HeightRequest="16"
+                           VerticalOptions="Center" />
+                    <Label Text="Tip:"
+                           FontFamily="Inter"
+                           FontSize="12"
+                           FontAttributes="Bold"
+                           TextColor="#000000" />
+                </StackLayout>
+                <Label Text="Complete at least one task every day to build your streak!"
+                       FontFamily="Inter"
+                       FontSize="12"
+                       TextColor="#1a1c1c"
+                       LineBreakMode="WordWrap" />
+            </StackLayout>
+        </Border>
+
+    </VerticalStackLayout>
+
+</ContentPage>
