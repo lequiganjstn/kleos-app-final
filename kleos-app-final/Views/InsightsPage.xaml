@@ -24,7 +24,7 @@
                FontFamily="Inter"
                FontSize="14"
                TextColor="#ba1a1a"
-               IsVisible="{Binding ErrorMessage, Converter={StaticResource StringToBoolConverter}}"
+               IsVisible="{Binding HasError}"
                Margin="0,12,0,0" />
 
         <!-- This Week vs Last Week -->

@@ -17,7 +17,7 @@
                FontFamily="Inter"
                FontSize="14"
                TextColor="#ba1a1a"
-               IsVisible="{Binding ErrorMessage, Converter={StaticResource StringToBoolConverter}}"
+               IsVisible="{Binding HasError}"
                Margin="0,12,0,0"
                LineBreakMode="WordWrap" />
 
@@ -78,7 +78,7 @@
                     BackgroundColor="#000000"
                     Padding="16,12"
                     CornerRadius="8"
-                    IsEnabled="{Binding IsLoading, Converter={StaticResource InvertedBoolConverter}}" />
+                    IsEnabled="{Binding IsNotLoading}" />
             
             <!-- Complete Button -->
             <Button Text="Complete"
@@ -90,7 +90,7 @@
                     BackgroundColor="#e2e2e2"
                     Padding="16,12"
                     CornerRadius="8"
-                    IsEnabled="{Binding IsLoading, Converter={StaticResource InvertedBoolConverter}}" />
+                    IsEnabled="{Binding IsNotLoading}" />
             
             <!-- Cancel Button -->
             <Button Text="Cancel"
@@ -100,7 +100,7 @@
                     TextColor="#7e7576"
                     BackgroundColor="Transparent"
                     Padding="16,12"
-                    IsEnabled="{Binding IsLoading, Converter={StaticResource InvertedBoolConverter}}" />
+                    IsEnabled="{Binding IsNotLoading}" />
         </VerticalStackLayout>
 
     </VerticalStackLayout>
