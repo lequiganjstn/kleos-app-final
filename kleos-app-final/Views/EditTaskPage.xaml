@@ -80,14 +80,26 @@
                     CornerRadius="8"
                     IsEnabled="{Binding IsNotLoading}" />
             
-            <!-- Complete Button -->
-            <Button Text="Complete"
-                    Command="{Binding CompleteTaskCommand}"
+            <!-- Complete/Incomplete Button -->
+            <Button Text="{Binding CompletionButtonText}"
+                    Command="{Binding ToggleCompletionCommand}"
                     FontFamily="Inter"
                     FontSize="14"
                     FontAttributes="Bold"
                     TextColor="#000000"
                     BackgroundColor="#e2e2e2"
+                    Padding="16,12"
+                    CornerRadius="8"
+                    IsEnabled="{Binding IsNotLoading}" />
+
+            <!-- Delete Button -->
+            <Button Text="Delete"
+                    Command="{Binding DeleteTaskCommand}"
+                    FontFamily="Inter"
+                    FontSize="14"
+                    FontAttributes="Bold"
+                    TextColor="#ffffff"
+                    BackgroundColor="#ba1a1a"
                     Padding="16,12"
                     CornerRadius="8"
                     IsEnabled="{Binding IsNotLoading}" />

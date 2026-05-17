@@ -98,16 +98,24 @@ public class StreakService
     }
 
     /// <summary>
-    /// Update streak for today if user completed at least 1 task.
+    /// Update streak for today based on the user's completed tasks.
     /// </summary>
     public async Task UpdateStreakForTodayAsync(int userId)
     {
-        var today = DateTime.UtcNow.Date;
-        var completedCount = await _database.GetCompletedTodosCountForDateAsync(userId, today);
+        await UpdateStreakForDateAsync(userId, DateTime.UtcNow);
+    }
+
+    /// <summary>
+    /// Update or remove a streak for a date based on how many tasks are completed that day.
+    /// </summary>
+    public async Task UpdateStreakForDateAsync(int userId, DateTime date)
+    {
+        var day = date.Date;
+        var completedCount = await _database.GetCompletedTodosCountForDateAsync(userId, day);
+        var existingStreak = await _database.GetStreakForDateAsync(userId, day);
 
         if (completedCount > 0)
         {
-            var existingStreak = await _database.GetStreakForDateAsync(userId, today);
             if (existingStreak != null)
             {
                 existingStreak.TasksCompletedCount = completedCount;
@@ -118,11 +126,15 @@ public class StreakService
                 var newStreak = new Streak
                 {
                     UserId = userId,
-                    Date = today,
+                    Date = day,
                     TasksCompletedCount = completedCount
                 };
                 await _database.CreateStreakAsync(newStreak);
             }
+        }
+        else if (existingStreak != null)
+        {
+            await _database.DeleteStreakAsync(existingStreak);
         }
     }
 
