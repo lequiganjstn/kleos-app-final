@@ -139,9 +139,13 @@ public class DatabaseService
     public async Task<Streak?> GetStreakForDateAsync(int userId, DateTime date)
     {
         var db = GetConnection();
-        var normalizedDate = date.Date;
+        var startOfDay = date.Date;
+        var startOfNextDay = startOfDay.AddDays(1);
+
         return await db.Table<Streak>()
-            .Where(s => s.UserId == userId && s.Date.Date == normalizedDate)
+            .Where(s => s.UserId == userId &&
+                        s.Date >= startOfDay &&
+                        s.Date < startOfNextDay)
             .FirstOrDefaultAsync();
     }
 
@@ -158,8 +162,9 @@ public class DatabaseService
     {
         var db = GetConnection();
         var startDate = DateTime.UtcNow.Date.AddDays(-days);
+
         return await db.Table<Streak>()
-            .Where(s => s.UserId == userId && s.Date.Date >= startDate)
+            .Where(s => s.UserId == userId && s.Date >= startDate)
             .OrderByDescending(s => s.Date)
             .ToListAsync();
     }
@@ -181,12 +186,14 @@ public class DatabaseService
     public async Task<int> GetCompletedTodosCountForDateAsync(int userId, DateTime date)
     {
         var db = GetConnection();
-        var normalizedDate = date.Date;
+        var startOfDay = date.Date;
+        var startOfNextDay = startOfDay.AddDays(1);
+
         return await db.Table<Todo>()
             .Where(t => t.UserId == userId &&
                         t.IsCompleted &&
-                        t.CompletedAt.HasValue &&
-                        t.CompletedAt.Value.Date == normalizedDate)
+                        t.CompletedAt >= startOfDay &&
+                        t.CompletedAt < startOfNextDay)
             .CountAsync();
     }
 
