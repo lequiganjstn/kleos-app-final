@@ -48,8 +48,4 @@
 
     </TabBar>
 
-    <!-- Edit Task Page (modal/detail) -->
-    <ShellContent Route="edittask"
-                  ContentTemplate="{DataTemplate local:EditTaskPage}" />
-
 </Shell>

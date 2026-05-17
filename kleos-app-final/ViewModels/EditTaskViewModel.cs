@@ -11,6 +11,7 @@ public partial class EditTaskViewModel : BaseViewModel
     private readonly DatabaseService _database;
     private readonly AuthenticationService _authService;
     private readonly StreakService _streakService;
+    private int _loadedTaskId;
 
     [ObservableProperty]
     private int taskId = 0;
@@ -31,14 +32,27 @@ public partial class EditTaskViewModel : BaseViewModel
         _streakService = streakService ?? throw new ArgumentNullException(nameof(streakService));
     }
 
+    partial void OnTaskIdChanged(int value)
+    {
+        if (value > 0 && value != _loadedTaskId)
+        {
+            _ = LoadTaskAsync();
+        }
+    }
+
     [RelayCommand]
     public async Task LoadTaskAsync()
     {
         if (TaskId <= 0)
         {
+            CurrentTask = null;
+            _loadedTaskId = 0;
             ErrorMessage = "Invalid task ID.";
             return;
         }
+
+        if (IsLoading)
+            return;
 
         IsLoading = true;
         ClearError();
@@ -46,13 +60,16 @@ public partial class EditTaskViewModel : BaseViewModel
         try
         {
             var todo = await _database.GetTodoByIdAsync(TaskId);
-            if (todo == null)
+            if (todo == null || todo.UserId != _authService.CurrentUserId)
             {
+                CurrentTask = null;
+                _loadedTaskId = 0;
                 ErrorMessage = "Task not found.";
                 return;
             }
 
             CurrentTask = todo;
+            _loadedTaskId = todo.Id;
             TaskTitle = todo.Title;
             TaskDescription = todo.Description ?? string.Empty;
         }
@@ -69,7 +86,10 @@ public partial class EditTaskViewModel : BaseViewModel
     [RelayCommand]
     public async Task UpdateTaskAsync()
     {
-        if (string.IsNullOrWhiteSpace(TaskTitle))
+        var title = TaskTitle.Trim();
+        var description = TaskDescription.Trim();
+
+        if (string.IsNullOrWhiteSpace(title))
         {
             ErrorMessage = "Please enter a task title.";
             return;
@@ -86,11 +106,11 @@ public partial class EditTaskViewModel : BaseViewModel
 
         try
         {
-            CurrentTask.Title = TaskTitle;
-            CurrentTask.Description = string.IsNullOrWhiteSpace(TaskDescription) ? null : TaskDescription;
-            
+            CurrentTask.Title = title;
+            CurrentTask.Description = string.IsNullOrWhiteSpace(description) ? null : description;
+
             await _database.UpdateTodoAsync(CurrentTask);
-            
+
             await Shell.Current.GoToAsync("..");
         }
         catch (Exception ex)
@@ -119,7 +139,7 @@ public partial class EditTaskViewModel : BaseViewModel
         {
             await _database.CompleteTodoAsync(CurrentTask.Id);
             await _streakService.UpdateStreakForTodayAsync(_authService.CurrentUserId);
-            
+
             await Shell.Current.GoToAsync("..");
         }
         catch (Exception ex)
@@ -140,7 +160,7 @@ public partial class EditTaskViewModel : BaseViewModel
 
     public async Task OnAppearingAsync()
     {
-        if (TaskId > 0)
+        if (TaskId > 0 && TaskId != _loadedTaskId)
         {
             await LoadTaskAsync();
         }

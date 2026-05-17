@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using kleos_app_final.Models;
 using kleos_app_final.Services;
+using kleos_app_final.Views;
 
 namespace kleos_app_final.ViewModels;
 
@@ -146,7 +147,7 @@ public partial class TodoViewModel : BaseViewModel
     {
         if (todo?.Id > 0)
         {
-            await Shell.Current.GoToAsync($"///edittask?taskId={todo.Id}");
+            await Shell.Current.GoToAsync($"{nameof(EditTaskPage)}?taskId={todo.Id}");
         }
     }
 
