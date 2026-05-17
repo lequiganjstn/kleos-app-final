@@ -181,6 +181,12 @@ public class DatabaseService
         return await db.UpdateAsync(streak);
     }
 
+    public async Task<int> DeleteStreakAsync(Streak streak)
+    {
+        var db = GetConnection();
+        return await db.DeleteAsync(streak);
+    }
+
     // ==================== Utility Operations ====================
 
     public async Task<int> GetCompletedTodosCountForDateAsync(int userId, DateTime date)

@@ -25,11 +25,21 @@ public partial class EditTaskViewModel : BaseViewModel
     [ObservableProperty]
     private Todo? currentTask;
 
+    public bool IsCurrentTaskCompleted => CurrentTask?.IsCompleted == true;
+
+    public string CompletionButtonText => IsCurrentTaskCompleted ? "Mark Incomplete" : "Complete";
+
     public EditTaskViewModel(DatabaseService database, AuthenticationService authService, StreakService streakService)
     {
         _database = database ?? throw new ArgumentNullException(nameof(database));
         _authService = authService ?? throw new ArgumentNullException(nameof(authService));
         _streakService = streakService ?? throw new ArgumentNullException(nameof(streakService));
+    }
+
+    partial void OnCurrentTaskChanged(Todo? value)
+    {
+        OnPropertyChanged(nameof(IsCurrentTaskCompleted));
+        OnPropertyChanged(nameof(CompletionButtonText));
     }
 
     partial void OnTaskIdChanged(int value)
@@ -124,7 +134,7 @@ public partial class EditTaskViewModel : BaseViewModel
     }
 
     [RelayCommand]
-    public async Task CompleteTaskAsync()
+    public async Task ToggleCompletionAsync()
     {
         if (CurrentTask == null)
         {
@@ -137,14 +147,65 @@ public partial class EditTaskViewModel : BaseViewModel
 
         try
         {
-            await _database.CompleteTodoAsync(CurrentTask.Id);
-            await _streakService.UpdateStreakForTodayAsync(_authService.CurrentUserId);
+            if (CurrentTask.IsCompleted)
+            {
+                var completedAt = CurrentTask.CompletedAt;
+                await _database.UncompleteTodoAsync(CurrentTask.Id);
+
+                if (completedAt.HasValue)
+                {
+                    await _streakService.UpdateStreakForDateAsync(_authService.CurrentUserId, completedAt.Value);
+                }
+            }
+            else
+            {
+                await _database.CompleteTodoAsync(CurrentTask.Id);
+                await _streakService.UpdateStreakForTodayAsync(_authService.CurrentUserId);
+            }
 
             await Shell.Current.GoToAsync("..");
         }
         catch (Exception ex)
         {
-            ErrorMessage = $"Failed to complete task: {ex.Message}";
+            ErrorMessage = CurrentTask.IsCompleted
+                ? $"Failed to mark task incomplete: {ex.Message}"
+                : $"Failed to complete task: {ex.Message}";
+        }
+        finally
+        {
+            IsLoading = false;
+        }
+    }
+
+    [RelayCommand]
+    public async Task DeleteTaskAsync()
+    {
+        if (CurrentTask == null)
+        {
+            ErrorMessage = "Task not found.";
+            return;
+        }
+
+        IsLoading = true;
+        ClearError();
+
+        try
+        {
+            var wasCompleted = CurrentTask.IsCompleted;
+            var completedAt = CurrentTask.CompletedAt;
+
+            await _database.DeleteTodoAsync(CurrentTask.Id);
+
+            if (wasCompleted && completedAt.HasValue)
+            {
+                await _streakService.UpdateStreakForDateAsync(_authService.CurrentUserId, completedAt.Value);
+            }
+
+            await Shell.Current.GoToAsync("..");
+        }
+        catch (Exception ex)
+        {
+            ErrorMessage = $"Failed to delete task: {ex.Message}";
         }
         finally
         {
