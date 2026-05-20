@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("kleos-app-final")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0+eb067711a6a5cc5e551e12ea00c988cd26247298")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0+92b13464befbbeb956716c5e377753390583dcb2")]
 [assembly: System.Reflection.AssemblyProductAttribute("kleos-app-final")]
 [assembly: System.Reflection.AssemblyTitleAttribute("kleos-app-final")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
