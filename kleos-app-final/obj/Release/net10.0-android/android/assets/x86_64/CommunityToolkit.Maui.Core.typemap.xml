@@ -1,0 +1,14 @@
+<api type="release" assembly-name="CommunityToolkit.Maui.Core" mvid="8d64b3ba789b4d00b3ecac287cc86f27">
+  <module assembly-name="CommunityToolkit.Maui.Core" mvid="8d64b3ba789b4d00b3ecac287cc86f27" mvid-bytes="urNkjZt4AE2z7KwofMhvJw==">
+    <types-scratch>
+      <entry key="crc64d6358e7bf64fbac4/OfflineSpeechToTextImplementation_SpeechRecognitionListener" java-name="crc64d6358e7bf64fbac4/OfflineSpeechToTextImplementation_SpeechRecognitionListener" managed-type-name="CommunityToolkit.Maui.Media.OfflineSpeechToTextImplementation/SpeechRecognitionListener" token="33554562" />
+      <entry key="crc64d6358e7bf64fbac4/RecognitionSupportCallback" java-name="crc64d6358e7bf64fbac4/RecognitionSupportCallback" managed-type-name="CommunityToolkit.Maui.Media.RecognitionSupportCallback" token="33554440" />
+      <entry key="crc64d6358e7bf64fbac4/Executor" java-name="crc64d6358e7bf64fbac4/Executor" managed-type-name="CommunityToolkit.Maui.Media.Executor" token="33554441" />
+      <entry key="crc64d6358e7bf64fbac4/ModelDownloadListener" java-name="crc64d6358e7bf64fbac4/ModelDownloadListener" managed-type-name="CommunityToolkit.Maui.Media.ModelDownloadListener" token="33554442" />
+      <entry key="crc64d6358e7bf64fbac4/SpeechToTextImplementation_SpeechRecognitionListener" java-name="crc64d6358e7bf64fbac4/SpeechToTextImplementation_SpeechRecognitionListener" managed-type-name="CommunityToolkit.Maui.Media.SpeechToTextImplementation/SpeechRecognitionListener" token="33554566" />
+      <entry key="crc64159f3caeb1269279/MauiDrawingView" java-name="crc64159f3caeb1269279/MauiDrawingView" managed-type-name="CommunityToolkit.Maui.Core.Views.MauiDrawingView" token="33554536" />
+      <entry key="crc64159f3caeb1269279/MauiSemanticOrderView" java-name="crc64159f3caeb1269279/MauiSemanticOrderView" managed-type-name="CommunityToolkit.Maui.Core.Views.MauiSemanticOrderView" token="33554541" />
+      <entry key="crc6436e425876cb621d9/FragmentLifecycleManager" java-name="crc6436e425876cb621d9/FragmentLifecycleManager" managed-type-name="CommunityToolkit.Maui.Core.Services.FragmentLifecycleManager" token="33554543" />
+    </types-scratch>
+  </module>
+</api>

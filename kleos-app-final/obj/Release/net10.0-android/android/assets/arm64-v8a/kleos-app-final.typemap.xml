@@ -1,0 +1,8 @@
+<api type="release" assembly-name="kleos-app-final" mvid="13598347b8ef4f66aaea6c3f3bddb857">
+  <module assembly-name="kleos-app-final" mvid="13598347b8ef4f66aaea6c3f3bddb857" mvid-bytes="R4NZE++4Zk+q6mw/O924Vw==">
+    <types-scratch>
+      <entry key="crc6438d42318cd366499/MainActivity" java-name="crc6438d42318cd366499/MainActivity" managed-type-name="kleos_app_final.MainActivity" token="33554507" />
+      <entry key="crc6438d42318cd366499/MainApplication" java-name="crc6438d42318cd366499/MainApplication" managed-type-name="kleos_app_final.MainApplication" token="33554508" />
+    </types-scratch>
+  </module>
+</api>

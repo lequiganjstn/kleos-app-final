@@ -1,0 +1,684 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>kleos-app-final</name>
+    </assembly>
+    <members>
+        <member name="M:kleos_app_final.Services.StreakService.RecalculateStreakAsync(System.Int32)">
+            <summary>
+            Recalculate the streak for a user based on their completed tasks.
+            Returns tuple: (currentStreak, longestStreak)
+            </summary>
+        </member>
+        <member name="M:kleos_app_final.Services.StreakService.UpdateStreakForTodayAsync(System.Int32)">
+            <summary>
+            Update streak for today based on the user's completed tasks.
+            </summary>
+        </member>
+        <member name="M:kleos_app_final.Services.StreakService.UpdateStreakForDateAsync(System.Int32,System.DateTime)">
+            <summary>
+            Update or remove a streak for a date based on how many tasks are completed that day.
+            </summary>
+        </member>
+        <member name="M:kleos_app_final.Services.StreakService.GetCompletedTasksLastNDaysAsync(System.Int32,System.Int32)">
+            <summary>
+            Get tasks completed for each day in the last N days.
+            </summary>
+        </member>
+        <member name="T:kleos_app_final.ViewModels.BaseViewModel">
+            <inheritdoc/>
+        </member>
+        <member name="P:kleos_app_final.ViewModels.BaseViewModel.HasError">
+            <summary>
+            Returns true if there is an error message to display.
+            </summary>
+        </member>
+        <member name="P:kleos_app_final.ViewModels.BaseViewModel.IsNotLoading">
+            <summary>
+            Returns true if the view model is not currently loading.
+            </summary>
+        </member>
+        <member name="M:kleos_app_final.ViewModels.BaseViewModel.OnPropertyChanged(System.ComponentModel.PropertyChangedEventArgs)">
+            <summary>
+            Override OnPropertyChanged to notify dependents when computed properties change.
+            </summary>
+        </member>
+        <member name="P:kleos_app_final.ViewModels.BaseViewModel.IsLoading">
+            <inheritdoc cref="F:kleos_app_final.ViewModels.BaseViewModel.isLoading"/>
+        </member>
+        <member name="P:kleos_app_final.ViewModels.BaseViewModel.ErrorMessage">
+            <inheritdoc cref="F:kleos_app_final.ViewModels.BaseViewModel.errorMessage"/>
+        </member>
+        <member name="T:kleos_app_final.ViewModels.CompletedViewModel">
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+        </member>
+        <member name="P:kleos_app_final.ViewModels.CompletedViewModel.CompletedTodos">
+            <inheritdoc cref="F:kleos_app_final.ViewModels.CompletedViewModel.completedTodos"/>
+        </member>
+        <member name="P:kleos_app_final.ViewModels.CompletedViewModel.HasNoCompletedTodos">
+            <inheritdoc cref="F:kleos_app_final.ViewModels.CompletedViewModel.hasNoCompletedTodos"/>
+        </member>
+        <member name="F:kleos_app_final.ViewModels.CompletedViewModel.loadCompletedTodosCommand">
+            <summary>The backing field for <see cref="P:kleos_app_final.ViewModels.CompletedViewModel.LoadCompletedTodosCommand"/>.</summary>
+        </member>
+        <member name="P:kleos_app_final.ViewModels.CompletedViewModel.LoadCompletedTodosCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:kleos_app_final.ViewModels.CompletedViewModel.LoadCompletedTodosAsync"/>.</summary>
+        </member>
+        <member name="F:kleos_app_final.ViewModels.CompletedViewModel.editCompletedTodoCommand">
+            <summary>The backing field for <see cref="P:kleos_app_final.ViewModels.CompletedViewModel.EditCompletedTodoCommand"/>.</summary>
+        </member>
+        <member name="P:kleos_app_final.ViewModels.CompletedViewModel.EditCompletedTodoCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand`1"/> instance wrapping <see cref="M:kleos_app_final.ViewModels.CompletedViewModel.EditCompletedTodoAsync(kleos_app_final.Models.Todo)"/>.</summary>
+        </member>
+        <member name="F:kleos_app_final.ViewModels.CompletedViewModel.uncompleteTodoCommand">
+            <summary>The backing field for <see cref="P:kleos_app_final.ViewModels.CompletedViewModel.UncompleteTodoCommand"/>.</summary>
+        </member>
+        <member name="P:kleos_app_final.ViewModels.CompletedViewModel.UncompleteTodoCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand`1"/> instance wrapping <see cref="M:kleos_app_final.ViewModels.CompletedViewModel.UncompleteTodoAsync(kleos_app_final.Models.Todo)"/>.</summary>
+        </member>
+        <member name="F:kleos_app_final.ViewModels.CompletedViewModel.deleteTodoCommand">
+            <summary>The backing field for <see cref="P:kleos_app_final.ViewModels.CompletedViewModel.DeleteTodoCommand"/>.</summary>
+        </member>
+        <member name="P:kleos_app_final.ViewModels.CompletedViewModel.DeleteTodoCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand`1"/> instance wrapping <see cref="M:kleos_app_final.ViewModels.CompletedViewModel.DeleteTodoAsync(kleos_app_final.Models.Todo)"/>.</summary>
+        </member>
+        <member name="F:kleos_app_final.ViewModels.CompletedViewModel.swipedUncompleteCommand">
+            <summary>The backing field for <see cref="P:kleos_app_final.ViewModels.CompletedViewModel.SwipedUncompleteCommand"/>.</summary>
+        </member>
+        <member name="P:kleos_app_final.ViewModels.CompletedViewModel.SwipedUncompleteCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand`1"/> instance wrapping <see cref="M:kleos_app_final.ViewModels.CompletedViewModel.SwipedUncompleteAsync(kleos_app_final.Models.Todo)"/>.</summary>
+        </member>
+        <member name="F:kleos_app_final.ViewModels.CompletedViewModel.swipedDeleteCommand">
+            <summary>The backing field for <see cref="P:kleos_app_final.ViewModels.CompletedViewModel.SwipedDeleteCommand"/>.</summary>
+        </member>
+        <member name="P:kleos_app_final.ViewModels.CompletedViewModel.SwipedDeleteCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand`1"/> instance wrapping <see cref="M:kleos_app_final.ViewModels.CompletedViewModel.SwipedDeleteAsync(kleos_app_final.Models.Todo)"/>.</summary>
+        </member>
+        <member name="T:kleos_app_final.ViewModels.EditTaskViewModel">
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+        </member>
+        <member name="P:kleos_app_final.ViewModels.EditTaskViewModel.TaskId">
+            <inheritdoc cref="F:kleos_app_final.ViewModels.EditTaskViewModel.taskId"/>
+        </member>
+        <member name="P:kleos_app_final.ViewModels.EditTaskViewModel.TaskTitle">
+            <inheritdoc cref="F:kleos_app_final.ViewModels.EditTaskViewModel.taskTitle"/>
+        </member>
+        <member name="P:kleos_app_final.ViewModels.EditTaskViewModel.TaskDescription">
+            <inheritdoc cref="F:kleos_app_final.ViewModels.EditTaskViewModel.taskDescription"/>
+        </member>
+        <member name="P:kleos_app_final.ViewModels.EditTaskViewModel.CurrentTask">
+            <inheritdoc cref="F:kleos_app_final.ViewModels.EditTaskViewModel.currentTask"/>
+        </member>
+        <member name="M:kleos_app_final.ViewModels.EditTaskViewModel.OnTaskIdChanged(System.Int32)">
+            <summary>Executes the logic for when <see cref="P:kleos_app_final.ViewModels.EditTaskViewModel.TaskId"/> just changed.</summary>
+            <param name="value">The new property value that was set.</param>
+            <remarks>This method is invoked right after the value of <see cref="P:kleos_app_final.ViewModels.EditTaskViewModel.TaskId"/> is changed.</remarks>
+        </member>
+        <member name="M:kleos_app_final.ViewModels.EditTaskViewModel.OnCurrentTaskChanged(kleos_app_final.Models.Todo)">
+            <summary>Executes the logic for when <see cref="P:kleos_app_final.ViewModels.EditTaskViewModel.CurrentTask"/> just changed.</summary>
+            <param name="value">The new property value that was set.</param>
+            <remarks>This method is invoked right after the value of <see cref="P:kleos_app_final.ViewModels.EditTaskViewModel.CurrentTask"/> is changed.</remarks>
+        </member>
+        <member name="F:kleos_app_final.ViewModels.EditTaskViewModel.loadTaskCommand">
+            <summary>The backing field for <see cref="P:kleos_app_final.ViewModels.EditTaskViewModel.LoadTaskCommand"/>.</summary>
+        </member>
+        <member name="P:kleos_app_final.ViewModels.EditTaskViewModel.LoadTaskCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:kleos_app_final.ViewModels.EditTaskViewModel.LoadTaskAsync"/>.</summary>
+        </member>
+        <member name="F:kleos_app_final.ViewModels.EditTaskViewModel.updateTaskCommand">
+            <summary>The backing field for <see cref="P:kleos_app_final.ViewModels.EditTaskViewModel.UpdateTaskCommand"/>.</summary>
+        </member>
+        <member name="P:kleos_app_final.ViewModels.EditTaskViewModel.UpdateTaskCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:kleos_app_final.ViewModels.EditTaskViewModel.UpdateTaskAsync"/>.</summary>
+        </member>
+        <member name="F:kleos_app_final.ViewModels.EditTaskViewModel.toggleCompletionCommand">
+            <summary>The backing field for <see cref="P:kleos_app_final.ViewModels.EditTaskViewModel.ToggleCompletionCommand"/>.</summary>
+        </member>
+        <member name="P:kleos_app_final.ViewModels.EditTaskViewModel.ToggleCompletionCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:kleos_app_final.ViewModels.EditTaskViewModel.ToggleCompletionAsync"/>.</summary>
+        </member>
+        <member name="F:kleos_app_final.ViewModels.EditTaskViewModel.deleteTaskCommand">
+            <summary>The backing field for <see cref="P:kleos_app_final.ViewModels.EditTaskViewModel.DeleteTaskCommand"/>.</summary>
+        </member>
+        <member name="P:kleos_app_final.ViewModels.EditTaskViewModel.DeleteTaskCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:kleos_app_final.ViewModels.EditTaskViewModel.DeleteTaskAsync"/>.</summary>
+        </member>
+        <member name="F:kleos_app_final.ViewModels.EditTaskViewModel.cancelCommand">
+            <summary>The backing field for <see cref="P:kleos_app_final.ViewModels.EditTaskViewModel.CancelCommand"/>.</summary>
+        </member>
+        <member name="P:kleos_app_final.ViewModels.EditTaskViewModel.CancelCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:kleos_app_final.ViewModels.EditTaskViewModel.CancelAsync"/>.</summary>
+        </member>
+        <member name="T:kleos_app_final.ViewModels.InsightsViewModel">
+            <inheritdoc/>
+            <inheritdoc/>
+        </member>
+        <member name="P:kleos_app_final.ViewModels.InsightsViewModel.TasksCompletedThisWeek">
+            <inheritdoc cref="F:kleos_app_final.ViewModels.InsightsViewModel.tasksCompletedThisWeek"/>
+        </member>
+        <member name="P:kleos_app_final.ViewModels.InsightsViewModel.TasksCompletedLastWeek">
+            <inheritdoc cref="F:kleos_app_final.ViewModels.InsightsViewModel.tasksCompletedLastWeek"/>
+        </member>
+        <member name="P:kleos_app_final.ViewModels.InsightsViewModel.WeekComparisonText">
+            <inheritdoc cref="F:kleos_app_final.ViewModels.InsightsViewModel.weekComparisonText"/>
+        </member>
+        <member name="P:kleos_app_final.ViewModels.InsightsViewModel.LastSevenDaysTasks">
+            <inheritdoc cref="F:kleos_app_final.ViewModels.InsightsViewModel.lastSevenDaysTasks"/>
+        </member>
+        <member name="P:kleos_app_final.ViewModels.InsightsViewModel.LastSevenDaysInsights">
+            <inheritdoc cref="F:kleos_app_final.ViewModels.InsightsViewModel.lastSevenDaysInsights"/>
+        </member>
+        <member name="F:kleos_app_final.ViewModels.InsightsViewModel.loadInsightsCommand">
+            <summary>The backing field for <see cref="P:kleos_app_final.ViewModels.InsightsViewModel.LoadInsightsCommand"/>.</summary>
+        </member>
+        <member name="P:kleos_app_final.ViewModels.InsightsViewModel.LoadInsightsCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:kleos_app_final.ViewModels.InsightsViewModel.LoadInsightsAsync"/>.</summary>
+        </member>
+        <member name="T:kleos_app_final.ViewModels.LoginViewModel">
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+        </member>
+        <member name="P:kleos_app_final.ViewModels.LoginViewModel.Email">
+            <inheritdoc cref="F:kleos_app_final.ViewModels.LoginViewModel.email"/>
+        </member>
+        <member name="P:kleos_app_final.ViewModels.LoginViewModel.Password">
+            <inheritdoc cref="F:kleos_app_final.ViewModels.LoginViewModel.password"/>
+        </member>
+        <member name="F:kleos_app_final.ViewModels.LoginViewModel.loginCommand">
+            <summary>The backing field for <see cref="P:kleos_app_final.ViewModels.LoginViewModel.LoginCommand"/>.</summary>
+        </member>
+        <member name="P:kleos_app_final.ViewModels.LoginViewModel.LoginCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:kleos_app_final.ViewModels.LoginViewModel.LoginAsync"/>.</summary>
+        </member>
+        <member name="F:kleos_app_final.ViewModels.LoginViewModel.goToRegisterCommand">
+            <summary>The backing field for <see cref="P:kleos_app_final.ViewModels.LoginViewModel.GoToRegisterCommand"/>.</summary>
+        </member>
+        <member name="P:kleos_app_final.ViewModels.LoginViewModel.GoToRegisterCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:kleos_app_final.ViewModels.LoginViewModel.GoToRegisterAsync"/>.</summary>
+        </member>
+        <member name="T:kleos_app_final.ViewModels.ProfileViewModel">
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+        </member>
+        <member name="P:kleos_app_final.ViewModels.ProfileViewModel.UserName">
+            <inheritdoc cref="F:kleos_app_final.ViewModels.ProfileViewModel.userName"/>
+        </member>
+        <member name="P:kleos_app_final.ViewModels.ProfileViewModel.UserEmail">
+            <inheritdoc cref="F:kleos_app_final.ViewModels.ProfileViewModel.userEmail"/>
+        </member>
+        <member name="P:kleos_app_final.ViewModels.ProfileViewModel.AvatarPath">
+            <inheritdoc cref="F:kleos_app_final.ViewModels.ProfileViewModel.avatarPath"/>
+        </member>
+        <member name="P:kleos_app_final.ViewModels.ProfileViewModel.InitialsText">
+            <inheritdoc cref="F:kleos_app_final.ViewModels.ProfileViewModel.initialsText"/>
+        </member>
+        <member name="P:kleos_app_final.ViewModels.ProfileViewModel.HasAvatar">
+            <inheritdoc cref="F:kleos_app_final.ViewModels.ProfileViewModel.hasAvatar"/>
+        </member>
+        <member name="F:kleos_app_final.ViewModels.ProfileViewModel.loadProfileCommand">
+            <summary>The backing field for <see cref="P:kleos_app_final.ViewModels.ProfileViewModel.LoadProfileCommand"/>.</summary>
+        </member>
+        <member name="P:kleos_app_final.ViewModels.ProfileViewModel.LoadProfileCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:kleos_app_final.ViewModels.ProfileViewModel.LoadProfileAsync"/>.</summary>
+        </member>
+        <member name="F:kleos_app_final.ViewModels.ProfileViewModel.pickAvatarCommand">
+            <summary>The backing field for <see cref="P:kleos_app_final.ViewModels.ProfileViewModel.PickAvatarCommand"/>.</summary>
+        </member>
+        <member name="P:kleos_app_final.ViewModels.ProfileViewModel.PickAvatarCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:kleos_app_final.ViewModels.ProfileViewModel.PickAvatarAsync"/>.</summary>
+        </member>
+        <member name="F:kleos_app_final.ViewModels.ProfileViewModel.logoutCommand">
+            <summary>The backing field for <see cref="P:kleos_app_final.ViewModels.ProfileViewModel.LogoutCommand"/>.</summary>
+        </member>
+        <member name="P:kleos_app_final.ViewModels.ProfileViewModel.LogoutCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:kleos_app_final.ViewModels.ProfileViewModel.LogoutAsync"/>.</summary>
+        </member>
+        <member name="T:kleos_app_final.ViewModels.RegisterViewModel">
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+        </member>
+        <member name="P:kleos_app_final.ViewModels.RegisterViewModel.Name">
+            <inheritdoc cref="F:kleos_app_final.ViewModels.RegisterViewModel.name"/>
+        </member>
+        <member name="P:kleos_app_final.ViewModels.RegisterViewModel.Email">
+            <inheritdoc cref="F:kleos_app_final.ViewModels.RegisterViewModel.email"/>
+        </member>
+        <member name="P:kleos_app_final.ViewModels.RegisterViewModel.Password">
+            <inheritdoc cref="F:kleos_app_final.ViewModels.RegisterViewModel.password"/>
+        </member>
+        <member name="P:kleos_app_final.ViewModels.RegisterViewModel.ConfirmPassword">
+            <inheritdoc cref="F:kleos_app_final.ViewModels.RegisterViewModel.confirmPassword"/>
+        </member>
+        <member name="F:kleos_app_final.ViewModels.RegisterViewModel.registerCommand">
+            <summary>The backing field for <see cref="P:kleos_app_final.ViewModels.RegisterViewModel.RegisterCommand"/>.</summary>
+        </member>
+        <member name="P:kleos_app_final.ViewModels.RegisterViewModel.RegisterCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:kleos_app_final.ViewModels.RegisterViewModel.RegisterAsync"/>.</summary>
+        </member>
+        <member name="F:kleos_app_final.ViewModels.RegisterViewModel.goToLoginCommand">
+            <summary>The backing field for <see cref="P:kleos_app_final.ViewModels.RegisterViewModel.GoToLoginCommand"/>.</summary>
+        </member>
+        <member name="P:kleos_app_final.ViewModels.RegisterViewModel.GoToLoginCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:kleos_app_final.ViewModels.RegisterViewModel.GoToLoginAsync"/>.</summary>
+        </member>
+        <member name="T:kleos_app_final.ViewModels.StreaksViewModel">
+            <inheritdoc/>
+            <inheritdoc/>
+        </member>
+        <member name="P:kleos_app_final.ViewModels.StreaksViewModel.CurrentStreak">
+            <inheritdoc cref="F:kleos_app_final.ViewModels.StreaksViewModel.currentStreak"/>
+        </member>
+        <member name="P:kleos_app_final.ViewModels.StreaksViewModel.LongestStreak">
+            <inheritdoc cref="F:kleos_app_final.ViewModels.StreaksViewModel.longestStreak"/>
+        </member>
+        <member name="P:kleos_app_final.ViewModels.StreaksViewModel.StreakStatusMessage">
+            <inheritdoc cref="F:kleos_app_final.ViewModels.StreaksViewModel.streakStatusMessage"/>
+        </member>
+        <member name="F:kleos_app_final.ViewModels.StreaksViewModel.loadStreaksCommand">
+            <summary>The backing field for <see cref="P:kleos_app_final.ViewModels.StreaksViewModel.LoadStreaksCommand"/>.</summary>
+        </member>
+        <member name="P:kleos_app_final.ViewModels.StreaksViewModel.LoadStreaksCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:kleos_app_final.ViewModels.StreaksViewModel.LoadStreaksAsync"/>.</summary>
+        </member>
+        <member name="T:kleos_app_final.ViewModels.TodoViewModel">
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+        </member>
+        <member name="P:kleos_app_final.ViewModels.TodoViewModel.Todos">
+            <inheritdoc cref="F:kleos_app_final.ViewModels.TodoViewModel.todos"/>
+        </member>
+        <member name="P:kleos_app_final.ViewModels.TodoViewModel.HasNoTodos">
+            <inheritdoc cref="F:kleos_app_final.ViewModels.TodoViewModel.hasNoTodos"/>
+        </member>
+        <member name="P:kleos_app_final.ViewModels.TodoViewModel.NewTodoTitle">
+            <inheritdoc cref="F:kleos_app_final.ViewModels.TodoViewModel.newTodoTitle"/>
+        </member>
+        <member name="P:kleos_app_final.ViewModels.TodoViewModel.NewTodoDescription">
+            <inheritdoc cref="F:kleos_app_final.ViewModels.TodoViewModel.newTodoDescription"/>
+        </member>
+        <member name="P:kleos_app_final.ViewModels.TodoViewModel.ShowAddTodoSheet">
+            <inheritdoc cref="F:kleos_app_final.ViewModels.TodoViewModel.showAddTodoSheet"/>
+        </member>
+        <member name="F:kleos_app_final.ViewModels.TodoViewModel.loadTodosCommand">
+            <summary>The backing field for <see cref="P:kleos_app_final.ViewModels.TodoViewModel.LoadTodosCommand"/>.</summary>
+        </member>
+        <member name="P:kleos_app_final.ViewModels.TodoViewModel.LoadTodosCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:kleos_app_final.ViewModels.TodoViewModel.LoadTodosAsync"/>.</summary>
+        </member>
+        <member name="F:kleos_app_final.ViewModels.TodoViewModel.openAddTodoModalCommand">
+            <summary>The backing field for <see cref="P:kleos_app_final.ViewModels.TodoViewModel.OpenAddTodoModalCommand"/>.</summary>
+        </member>
+        <member name="P:kleos_app_final.ViewModels.TodoViewModel.OpenAddTodoModalCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IRelayCommand"/> instance wrapping <see cref="M:kleos_app_final.ViewModels.TodoViewModel.OpenAddTodoModal"/>.</summary>
+        </member>
+        <member name="F:kleos_app_final.ViewModels.TodoViewModel.closeAddTodoModalCommand">
+            <summary>The backing field for <see cref="P:kleos_app_final.ViewModels.TodoViewModel.CloseAddTodoModalCommand"/>.</summary>
+        </member>
+        <member name="P:kleos_app_final.ViewModels.TodoViewModel.CloseAddTodoModalCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IRelayCommand"/> instance wrapping <see cref="M:kleos_app_final.ViewModels.TodoViewModel.CloseAddTodoModal"/>.</summary>
+        </member>
+        <member name="F:kleos_app_final.ViewModels.TodoViewModel.addTodoCommand">
+            <summary>The backing field for <see cref="P:kleos_app_final.ViewModels.TodoViewModel.AddTodoCommand"/>.</summary>
+        </member>
+        <member name="P:kleos_app_final.ViewModels.TodoViewModel.AddTodoCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:kleos_app_final.ViewModels.TodoViewModel.AddTodoAsync"/>.</summary>
+        </member>
+        <member name="F:kleos_app_final.ViewModels.TodoViewModel.completeTodoCommand">
+            <summary>The backing field for <see cref="P:kleos_app_final.ViewModels.TodoViewModel.CompleteTodoCommand"/>.</summary>
+        </member>
+        <member name="P:kleos_app_final.ViewModels.TodoViewModel.CompleteTodoCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand`1"/> instance wrapping <see cref="M:kleos_app_final.ViewModels.TodoViewModel.CompleteTodoAsync(System.Int32)"/>.</summary>
+        </member>
+        <member name="F:kleos_app_final.ViewModels.TodoViewModel.swipedCompletedCommand">
+            <summary>The backing field for <see cref="P:kleos_app_final.ViewModels.TodoViewModel.SwipedCompletedCommand"/>.</summary>
+        </member>
+        <member name="P:kleos_app_final.ViewModels.TodoViewModel.SwipedCompletedCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand`1"/> instance wrapping <see cref="M:kleos_app_final.ViewModels.TodoViewModel.SwipedCompletedAsync(kleos_app_final.Models.Todo)"/>.</summary>
+        </member>
+        <member name="F:kleos_app_final.ViewModels.TodoViewModel.editTaskCommand">
+            <summary>The backing field for <see cref="P:kleos_app_final.ViewModels.TodoViewModel.EditTaskCommand"/>.</summary>
+        </member>
+        <member name="P:kleos_app_final.ViewModels.TodoViewModel.EditTaskCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand`1"/> instance wrapping <see cref="M:kleos_app_final.ViewModels.TodoViewModel.EditTaskAsync(kleos_app_final.Models.Todo)"/>.</summary>
+        </member>
+        <member name="T:kleos_app_final.Resource">
+            <summary>
+            Android Resource Designer class.
+            Exposes the Android Resource designer assembly into the project Namespace.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Maui.Controls.ColorAnimationExtensions_Button.TextColorTo(Microsoft.Maui.Controls.Button,Microsoft.Maui.Graphics.Color,System.UInt32,System.UInt32,Microsoft.Maui.Easing,System.Threading.CancellationToken)">
+            <summary>
+            Animates the TextColor of an <see cref = "T:Microsoft.Maui.ITextStyle"/> to the given color
+            </summary>
+            <param name = "element"></param>
+            <param name = "color">The target color to animate the <see cref = "P:Microsoft.Maui.ITextStyle.TextColor"/> to</param>
+            <param name = "rate">The time, in milliseconds, between the frames of the animation</param>
+            <param name = "length">The duration, in milliseconds, of the animation</param>
+            <param name = "easing">The easing function to be used in the animation</param>
+            <param name = "token"><see cref = "T:System.Threading.CancellationToken"/></param>
+            <returns>Value indicating if the animation completed successfully or not</returns>
+        </member>
+        <member name="M:Microsoft.Maui.Controls.ColorAnimationExtensions_DatePicker.TextColorTo(Microsoft.Maui.Controls.DatePicker,Microsoft.Maui.Graphics.Color,System.UInt32,System.UInt32,Microsoft.Maui.Easing,System.Threading.CancellationToken)">
+            <summary>
+            Animates the TextColor of an <see cref = "T:Microsoft.Maui.ITextStyle"/> to the given color
+            </summary>
+            <param name = "element"></param>
+            <param name = "color">The target color to animate the <see cref = "P:Microsoft.Maui.ITextStyle.TextColor"/> to</param>
+            <param name = "rate">The time, in milliseconds, between the frames of the animation</param>
+            <param name = "length">The duration, in milliseconds, of the animation</param>
+            <param name = "easing">The easing function to be used in the animation</param>
+            <param name = "token"><see cref = "T:System.Threading.CancellationToken"/></param>
+            <returns>Value indicating if the animation completed successfully or not</returns>
+        </member>
+        <member name="M:Microsoft.Maui.Controls.ColorAnimationExtensions_Editor.TextColorTo(Microsoft.Maui.Controls.Editor,Microsoft.Maui.Graphics.Color,System.UInt32,System.UInt32,Microsoft.Maui.Easing,System.Threading.CancellationToken)">
+            <summary>
+            Animates the TextColor of an <see cref = "T:Microsoft.Maui.ITextStyle"/> to the given color
+            </summary>
+            <param name = "element"></param>
+            <param name = "color">The target color to animate the <see cref = "P:Microsoft.Maui.ITextStyle.TextColor"/> to</param>
+            <param name = "rate">The time, in milliseconds, between the frames of the animation</param>
+            <param name = "length">The duration, in milliseconds, of the animation</param>
+            <param name = "easing">The easing function to be used in the animation</param>
+            <param name = "token"><see cref = "T:System.Threading.CancellationToken"/></param>
+            <returns>Value indicating if the animation completed successfully or not</returns>
+        </member>
+        <member name="M:Microsoft.Maui.Controls.ColorAnimationExtensions_Entry.TextColorTo(Microsoft.Maui.Controls.Entry,Microsoft.Maui.Graphics.Color,System.UInt32,System.UInt32,Microsoft.Maui.Easing,System.Threading.CancellationToken)">
+            <summary>
+            Animates the TextColor of an <see cref = "T:Microsoft.Maui.ITextStyle"/> to the given color
+            </summary>
+            <param name = "element"></param>
+            <param name = "color">The target color to animate the <see cref = "P:Microsoft.Maui.ITextStyle.TextColor"/> to</param>
+            <param name = "rate">The time, in milliseconds, between the frames of the animation</param>
+            <param name = "length">The duration, in milliseconds, of the animation</param>
+            <param name = "easing">The easing function to be used in the animation</param>
+            <param name = "token"><see cref = "T:System.Threading.CancellationToken"/></param>
+            <returns>Value indicating if the animation completed successfully or not</returns>
+        </member>
+        <member name="M:Microsoft.Maui.Controls.ColorAnimationExtensions_InputView.TextColorTo(Microsoft.Maui.Controls.InputView,Microsoft.Maui.Graphics.Color,System.UInt32,System.UInt32,Microsoft.Maui.Easing,System.Threading.CancellationToken)">
+            <summary>
+            Animates the TextColor of an <see cref = "T:Microsoft.Maui.ITextStyle"/> to the given color
+            </summary>
+            <param name = "element"></param>
+            <param name = "color">The target color to animate the <see cref = "P:Microsoft.Maui.ITextStyle.TextColor"/> to</param>
+            <param name = "rate">The time, in milliseconds, between the frames of the animation</param>
+            <param name = "length">The duration, in milliseconds, of the animation</param>
+            <param name = "easing">The easing function to be used in the animation</param>
+            <param name = "token"><see cref = "T:System.Threading.CancellationToken"/></param>
+            <returns>Value indicating if the animation completed successfully or not</returns>
+        </member>
+        <member name="M:Microsoft.Maui.Controls.ColorAnimationExtensions_Label.TextColorTo(Microsoft.Maui.Controls.Label,Microsoft.Maui.Graphics.Color,System.UInt32,System.UInt32,Microsoft.Maui.Easing,System.Threading.CancellationToken)">
+            <summary>
+            Animates the TextColor of an <see cref = "T:Microsoft.Maui.ITextStyle"/> to the given color
+            </summary>
+            <param name = "element"></param>
+            <param name = "color">The target color to animate the <see cref = "P:Microsoft.Maui.ITextStyle.TextColor"/> to</param>
+            <param name = "rate">The time, in milliseconds, between the frames of the animation</param>
+            <param name = "length">The duration, in milliseconds, of the animation</param>
+            <param name = "easing">The easing function to be used in the animation</param>
+            <param name = "token"><see cref = "T:System.Threading.CancellationToken"/></param>
+            <returns>Value indicating if the animation completed successfully or not</returns>
+        </member>
+        <member name="M:Microsoft.Maui.Controls.ColorAnimationExtensions_Picker.TextColorTo(Microsoft.Maui.Controls.Picker,Microsoft.Maui.Graphics.Color,System.UInt32,System.UInt32,Microsoft.Maui.Easing,System.Threading.CancellationToken)">
+            <summary>
+            Animates the TextColor of an <see cref = "T:Microsoft.Maui.ITextStyle"/> to the given color
+            </summary>
+            <param name = "element"></param>
+            <param name = "color">The target color to animate the <see cref = "P:Microsoft.Maui.ITextStyle.TextColor"/> to</param>
+            <param name = "rate">The time, in milliseconds, between the frames of the animation</param>
+            <param name = "length">The duration, in milliseconds, of the animation</param>
+            <param name = "easing">The easing function to be used in the animation</param>
+            <param name = "token"><see cref = "T:System.Threading.CancellationToken"/></param>
+            <returns>Value indicating if the animation completed successfully or not</returns>
+        </member>
+        <member name="M:Microsoft.Maui.Controls.ColorAnimationExtensions_RadioButton.TextColorTo(Microsoft.Maui.Controls.RadioButton,Microsoft.Maui.Graphics.Color,System.UInt32,System.UInt32,Microsoft.Maui.Easing,System.Threading.CancellationToken)">
+            <summary>
+            Animates the TextColor of an <see cref = "T:Microsoft.Maui.ITextStyle"/> to the given color
+            </summary>
+            <param name = "element"></param>
+            <param name = "color">The target color to animate the <see cref = "P:Microsoft.Maui.ITextStyle.TextColor"/> to</param>
+            <param name = "rate">The time, in milliseconds, between the frames of the animation</param>
+            <param name = "length">The duration, in milliseconds, of the animation</param>
+            <param name = "easing">The easing function to be used in the animation</param>
+            <param name = "token"><see cref = "T:System.Threading.CancellationToken"/></param>
+            <returns>Value indicating if the animation completed successfully or not</returns>
+        </member>
+        <member name="M:Microsoft.Maui.Controls.ColorAnimationExtensions_SearchBar.TextColorTo(Microsoft.Maui.Controls.SearchBar,Microsoft.Maui.Graphics.Color,System.UInt32,System.UInt32,Microsoft.Maui.Easing,System.Threading.CancellationToken)">
+            <summary>
+            Animates the TextColor of an <see cref = "T:Microsoft.Maui.ITextStyle"/> to the given color
+            </summary>
+            <param name = "element"></param>
+            <param name = "color">The target color to animate the <see cref = "P:Microsoft.Maui.ITextStyle.TextColor"/> to</param>
+            <param name = "rate">The time, in milliseconds, between the frames of the animation</param>
+            <param name = "length">The duration, in milliseconds, of the animation</param>
+            <param name = "easing">The easing function to be used in the animation</param>
+            <param name = "token"><see cref = "T:System.Threading.CancellationToken"/></param>
+            <returns>Value indicating if the animation completed successfully or not</returns>
+        </member>
+        <member name="M:Microsoft.Maui.Controls.ColorAnimationExtensions_TimePicker.TextColorTo(Microsoft.Maui.Controls.TimePicker,Microsoft.Maui.Graphics.Color,System.UInt32,System.UInt32,Microsoft.Maui.Easing,System.Threading.CancellationToken)">
+            <summary>
+            Animates the TextColor of an <see cref = "T:Microsoft.Maui.ITextStyle"/> to the given color
+            </summary>
+            <param name = "element"></param>
+            <param name = "color">The target color to animate the <see cref = "P:Microsoft.Maui.ITextStyle.TextColor"/> to</param>
+            <param name = "rate">The time, in milliseconds, between the frames of the animation</param>
+            <param name = "length">The duration, in milliseconds, of the animation</param>
+            <param name = "easing">The easing function to be used in the animation</param>
+            <param name = "token"><see cref = "T:System.Threading.CancellationToken"/></param>
+            <returns>Value indicating if the animation completed successfully or not</returns>
+        </member>
+        <member name="T:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs">
+            <summary>
+            A helper type providing cached, reusable <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instances
+            for all properties generated with <see cref="T:CommunityToolkit.Mvvm.ComponentModel.ObservablePropertyAttribute"/>.
+            </summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.IsLoading">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "IsLoading" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.ErrorMessage">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "ErrorMessage" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.CompletedTodos">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "CompletedTodos" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.HasNoCompletedTodos">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "HasNoCompletedTodos" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.TaskId">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "TaskId" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.TaskTitle">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "TaskTitle" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.TaskDescription">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "TaskDescription" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.CurrentTask">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "CurrentTask" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.TasksCompletedThisWeek">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "TasksCompletedThisWeek" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.TasksCompletedLastWeek">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "TasksCompletedLastWeek" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.WeekComparisonText">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "WeekComparisonText" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.LastSevenDaysTasks">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "LastSevenDaysTasks" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.LastSevenDaysInsights">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "LastSevenDaysInsights" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.Email">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "Email" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.Password">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "Password" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.UserName">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "UserName" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.UserEmail">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "UserEmail" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.AvatarPath">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "AvatarPath" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.InitialsText">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "InitialsText" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.HasAvatar">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "HasAvatar" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.Name">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "Name" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.ConfirmPassword">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "ConfirmPassword" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.CurrentStreak">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "CurrentStreak" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.LongestStreak">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "LongestStreak" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.StreakStatusMessage">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "StreakStatusMessage" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.Todos">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "Todos" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.HasNoTodos">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "HasNoTodos" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.NewTodoTitle">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "NewTodoTitle" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.NewTodoDescription">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "NewTodoDescription" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.ShowAddTodoSheet">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "ShowAddTodoSheet" generated properties.</summary>
+        </member>
+        <member name="T:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs">
+            <summary>
+            A helper type providing cached, reusable <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instances
+            for all properties generated with <see cref="T:CommunityToolkit.Mvvm.ComponentModel.ObservablePropertyAttribute"/>.
+            </summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.IsLoading">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "IsLoading" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.ErrorMessage">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "ErrorMessage" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.CompletedTodos">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "CompletedTodos" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.HasNoCompletedTodos">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "HasNoCompletedTodos" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.TaskId">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "TaskId" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.TaskTitle">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "TaskTitle" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.TaskDescription">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "TaskDescription" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.CurrentTask">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "CurrentTask" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.TasksCompletedThisWeek">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "TasksCompletedThisWeek" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.TasksCompletedLastWeek">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "TasksCompletedLastWeek" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.WeekComparisonText">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "WeekComparisonText" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.LastSevenDaysTasks">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "LastSevenDaysTasks" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.LastSevenDaysInsights">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "LastSevenDaysInsights" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.Email">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "Email" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.Password">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "Password" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.UserName">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "UserName" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.UserEmail">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "UserEmail" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.AvatarPath">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "AvatarPath" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.InitialsText">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "InitialsText" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.HasAvatar">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "HasAvatar" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.Name">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "Name" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.ConfirmPassword">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "ConfirmPassword" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.CurrentStreak">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "CurrentStreak" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.LongestStreak">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "LongestStreak" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.StreakStatusMessage">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "StreakStatusMessage" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.Todos">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "Todos" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.HasNoTodos">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "HasNoTodos" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.NewTodoTitle">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "NewTodoTitle" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.NewTodoDescription">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "NewTodoDescription" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.ShowAddTodoSheet">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "ShowAddTodoSheet" generated properties.</summary>
+        </member>
+    </members>
+</doc>

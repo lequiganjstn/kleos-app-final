@@ -1,3 +1,5 @@
 <Solution>
-  <Project Path="kleos-app-final/kleos-app-final.csproj" />
+  <Project Path="kleos-app-final/kleos-app-final.csproj">
+    <Deploy />
+  </Project>
 </Solution>

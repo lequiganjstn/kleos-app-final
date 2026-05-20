@@ -1,0 +1,8 @@
+<api type="release" assembly-name="CommunityToolkit.Maui" mvid="c121777bba374f90b5ca782ce7f6e59d">
+  <module assembly-name="CommunityToolkit.Maui" mvid="c121777bba374f90b5ca782ce7f6e59d" mvid-bytes="e3chwTe6kE+1yngs5/blnQ==">
+    <types-scratch>
+      <entry key="crc640fd0ddb16fe433d4/TouchBehavior_AccessibilityListener" java-name="crc640fd0ddb16fe433d4/TouchBehavior_AccessibilityListener" managed-type-name="CommunityToolkit.Maui.Behaviors.TouchBehavior/AccessibilityListener" token="33554805" />
+      <entry key="crc648fc34c62be8fbbff/Snackbar_SnackbarCallback" java-name="crc648fc34c62be8fbbff/Snackbar_SnackbarCallback" managed-type-name="CommunityToolkit.Maui.Alerts.Snackbar/SnackbarCallback" token="33554837" />
+    </types-scratch>
+  </module>
+</api>
